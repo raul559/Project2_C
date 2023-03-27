@@ -13,6 +13,7 @@ typedef struct TrieNode TrieNode;
 struct TrieNode
 {
   // array of pointers for children nodes
+  char data;
   struct TrieNode *childNode[LOWERCASE_LETTERS];
   int wordCount;
 };
@@ -20,18 +21,17 @@ struct TrieNode
 struct TrieNode *root = NULL;
 
 // returns a new Trie Node
-struct TrieNode *getNode()
+struct TrieNode *createNode()
 {
   // memory allocation of new node
   struct TrieNode *node = malloc(sizeof(struct TrieNode));
   node->wordCount = 0;
-
+  node->data = -1;
   // initializing child nodes
   for (int i = 0; i < LOWERCASE_LETTERS; i++)
   {
     node->childNode[i] = NULL;
   }
-
   return node;
 };
 
