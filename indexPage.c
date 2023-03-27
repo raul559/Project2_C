@@ -10,13 +10,30 @@
 #define LOWERCASE_LETTERS 26
 
 typedef struct TrieNode TrieNode;
- struct TrieNode
+struct TrieNode
 {
   // array of pointers for children nodes
   struct TrieNode *childNode[LOWERCASE_LETTERS];
   int wordCount;
 };
+// root node declaration
+struct TrieNode *root = NULL;
 
+// returns a new Trie Node
+struct TrieNode *getNode()
+{
+  // memory allocation of new node
+  struct TrieNode *node = malloc(sizeof(struct TrieNode));
+  node->wordCount = 0;
+
+  // initializing child nodes
+  for (int i = 0; i < LOWERCASE_LETTERS; i++)
+  {
+    node->childNode[i] = NULL;
+  }
+
+  return node;
+};
 
 /* NOTE: int return values can be used to indicate errors (typically non-zero)
    or success (typically zero return value) */
@@ -47,21 +64,25 @@ int main(int argc, char **argv)
 /* TODO: change this return type */
 void indexPage(const char *url)
 {
-
 }
 
 int addWordOccurrence(const char *word, const int wordLength
                       /* TODO: other parameters you need */)
 {
-
 }
 
 void printTrieContents(/* TODO: any parameters you need */)
 {
-
 }
 
+int freeTrieMemory(struct TrieNode *node)
+{
+  for (int i = 0; i < LOWERCASE_LETTERS; i++)
+  {
+    freeTrieMemory(node->childNode[i]);
+  }
 
+  free(node);
 }
 
 /* You should not need to modify this function */
