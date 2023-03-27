@@ -10,15 +10,14 @@
 #define LOWERCASE_LETTERS 26
 
 typedef struct TrieNode TrieNode;
- struct TrieNode
+struct TrieNode
 {
   // array of pointers for children nodes
   struct TrieNode *childNode[LOWERCASE_LETTERS];
   int wordCount;
 };
-
-//root node declaration
- struct TrieNode *root = NULL;
+// root node declaration
+struct TrieNode *root = NULL;
 
 // returns a new Trie Node
 struct TrieNode *getNode()
@@ -65,25 +64,25 @@ int main(int argc, char **argv)
 /* TODO: change this return type */
 void indexPage(const char *url)
 {
-
 }
 
 int addWordOccurrence(const char *word, const int wordLength
                       /* TODO: other parameters you need */)
 {
-
 }
 
 void printTrieContents(/* TODO: any parameters you need */)
 {
-
 }
 
-//Recursively free trie
-//passing ¨struct¨ TrieNode instead of TrieNode *node may be wrong
-int freeTrieMemory( struct TrieNode *node)
+int freeTrieMemory(struct TrieNode *node)
 {
+  for (int i = 0; i < LOWERCASE_LETTERS; i++)
+  {
+    freeTrieMemory(node->childNode[i]);
+  }
 
+  free(node);
 }
 
 /* You should not need to modify this function */
