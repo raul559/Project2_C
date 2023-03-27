@@ -7,7 +7,15 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#define LOWERCASE_LETTERS 26
 
+typedef struct TrieNode TrieNode;
+ struct TrieNode
+{
+  // array of pointers for children nodes
+  struct TrieNode *childNode[LOWERCASE_LETTERS];
+  int wordCount;
+};
 /* TODO: structure definitions */
 
 
@@ -47,8 +55,15 @@ int addWordOccurrence(const char* word, const int wordLength
 void printTrieContents(/* TODO: any parameters you need */)
 {}
 
-int freeTrieMemory(/* TODO: any parameters you need */)
-{}
+int freeTrieMemory( struct TrieNode *node)
+{
+  for(int i = 0; i < LOWERCASE_LETTERS; i++){
+    freeTrieMemory(node->childNode[i]);
+  }
+
+  free(node);
+
+}
 
 /* You should not need to modify this function */
 int getText(const char* srcAddr, char* buffer, const int bufSize){
