@@ -12,8 +12,9 @@
 typedef struct TrieNode TrieNode;
 struct TrieNode
 {
-  // array of pointers for children nodes
+  //holds the letter
   char data;
+  // array of pointers for children nodes
   struct TrieNode *childNode[LOWERCASE_LETTERS];
   int wordCount;
 };
