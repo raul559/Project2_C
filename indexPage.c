@@ -56,6 +56,10 @@ int main(int argc, char **argv)
 
   /* argv[1] will be the URL to index, if argc > 1 */
 
+  // indexPage();
+  // printTrieContents();
+  // freeTrieMemory();
+  
   return 0;
 }
 
