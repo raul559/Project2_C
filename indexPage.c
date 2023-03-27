@@ -59,7 +59,7 @@ int main(int argc, char **argv)
   // indexPage();
   // printTrieContents();
   // freeTrieMemory();
-  
+
   return 0;
 }
 
