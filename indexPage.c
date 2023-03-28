@@ -69,23 +69,27 @@ int main(int argc, char **argv)
 void indexPage(const char *url)
 {
 }
-/* TODO: properly increment word occurence counter*/
+
 void addWordOccurrence(TrieNode *root, const char *word, const int wordLength)
 {
   TrieNode *tempNode = root;
 
-  for (int i = 0; i < wordLength && word[i] != '\0'; i++){
-    //Index is the position of the letter
-    int index = (int) word[i] - 'a';
-    //if the child node does not exist, create new node;
-    if (tempNode->childNode[index] == NULL){
+  for (int i = 0; i < wordLength && word[i] != '\0'; i++)
+  {
+    // Index is the position of the letter
+    int index = (int)word[i] - 'a';
+    // if the child node does not exist, create new node;
+    if (tempNode->childNode[index] == NULL)
+    {
       tempNode->childNode[index] = createNode(word[i]);
-      //Might be incorrect
-      tempNode->childNode[index]->wordCount += 1; 
+      // Might be incorrect
+      tempNode->childNode[index]->wordCount += 1;
     }
-    //Traverse the trie
+    // Traverse the trie
     tempNode = tempNode->childNode[index];
   }
+  // increment word count
+  tempNode->wordCount += 1;
 }
 
 void printTrieContents(/* TODO: any parameters you need */)
