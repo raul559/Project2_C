@@ -12,7 +12,7 @@
 typedef struct TrieNode TrieNode;
 struct TrieNode
 {
-  //holds the letter
+  // holds the letter
   char data;
   // array of pointers for children nodes
   struct TrieNode *childNode[LOWERCASE_LETTERS];
@@ -22,12 +22,12 @@ struct TrieNode
 struct TrieNode *root = NULL;
 
 // returns a new Trie Node
-struct TrieNode *createNode()
+struct TrieNode *createNode(char data)
 {
   // memory allocation of new node
   struct TrieNode *node = malloc(sizeof(struct TrieNode));
   node->wordCount = 0;
-  node->data = -1;
+  node->data = data;
   // initializing child nodes
   for (int i = 0; i < LOWERCASE_LETTERS; i++)
   {
@@ -42,8 +42,7 @@ struct TrieNode *createNode()
 /* TODO: change this return type */
 void indexPage(const char *url);
 
-int addWordOccurrence(const char *word, const int wordLength
-                      /* TODO: other parameters you need */);
+void addWordOccurrence(TrieNode *root, const char *word, const int wordLength);
 
 void printTrieContents(/* TODO: any parameters you need */);
 
@@ -71,9 +70,26 @@ void indexPage(const char *url)
 {
 }
 
-int addWordOccurrence(const char *word, const int wordLength
-                      /* TODO: other parameters you need */)
+void addWordOccurrence(TrieNode *root, const char *word, const int wordLength)
 {
+  TrieNode *tempNode = root;
+
+  for (int i = 0; i < wordLength && word[i] != '\0'; i++)
+  {
+    // Index is the position of the letter
+    int index = (int)word[i] - 'a';
+    // if the child node does not exist, create new node;
+    if (tempNode->childNode[index] == NULL)
+    {
+      tempNode->childNode[index] = createNode(word[i]);
+      // Might be incorrect
+      tempNode->childNode[index]->wordCount += 1;
+    }
+    // Traverse the trie
+    tempNode = tempNode->childNode[index];
+  }
+  // increment word count
+  tempNode->wordCount += 1;
 }
 
 void printTrieContents(/* TODO: any parameters you need */)
