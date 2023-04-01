@@ -42,23 +42,25 @@ struct TrieNode *createNode(char data)
 /* TODO: change this return type */
 void indexPage(const char *url);
 
-void addWordOccurrence(TrieNode *root, const char *word, const int wordLength);
+int addWordOccurrence(TrieNode *root, const char *word, const int wordLength);
 
 void printTrieContents(/* TODO: any parameters you need */);
 
-int freeTrieMemory(struct TrieNode *node);
+void freeTrieMemory(TrieNode *node);
 
 int getText(const char *srcAddr, char *buffer, const int bufSize);
 
-int main(int argc, char **argv)
+int main()
 {
-  /* TODO: write the (simple) main function
+  /* TODO: write the (simple) main function */
 
   /* argv[1] will be the URL to index, if argc > 1 */
 
   // indexPage();
   // printTrieContents();
   // freeTrieMemory();
+  TrieNode *root = createNode('\0');
+  addWordOccurrence(root,"hello",5);
 
   return 0;
 }
@@ -68,9 +70,11 @@ int main(int argc, char **argv)
 /* TODO: change this return type */
 void indexPage(const char *url)
 {
+
+
 }
 
-void addWordOccurrence(TrieNode *root, const char *word, const int wordLength)
+int addWordOccurrence(TrieNode *root, const char *word, const int wordLength)
 {
   TrieNode *tempNode = root;
 
@@ -90,13 +94,17 @@ void addWordOccurrence(TrieNode *root, const char *word, const int wordLength)
   }
   // increment word count
   tempNode->wordCount += 1;
+  if (tempNode != NULL){
+    return 1;
+  }
+  return 0;
 }
 
 void printTrieContents(/* TODO: any parameters you need */)
 {
 }
 
-int freeTrieMemory(struct TrieNode *node)
+void freeTrieMemory(struct TrieNode *node)
 {
   for (int i = 0; i < LOWERCASE_LETTERS; i++)
   {
