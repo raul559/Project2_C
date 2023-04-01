@@ -7,9 +7,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
 #define LOWERCASE_LETTERS 26
-#define BUF_SIZE 30000
-char *contents_buf[30000] = { 0 };
+#define BUF_SIZE 3000
+char contents_buf[3000] = { 0 };
 
 typedef struct TrieNode TrieNode;
 struct TrieNode
@@ -46,7 +47,7 @@ void indexPage(const char *url);
 
 void addWordOccurrence(TrieNode *root, const char *word, const int wordLength);
 
-void printTrieContents(/* TODO: any parameters you need */);
+void printTrieContents(TrieNode *node, char* letters, int bufLen);
 
 int freeTrieMemory(struct TrieNode *node);
 
@@ -54,13 +55,14 @@ int getText(const char *srcAddr, char *buffer, const int bufSize);
 
 int main(int argc, char **argv)
 {
-  /* TODO: write the (simple) main function
+  /* TODO: write the (simple) main function */
+  root = createNode(' ');
 
   /* argv[1] will be the URL to index, if argc > 1 */
-
-  // indexPage();
-  // printTrieContents();
-  // freeTrieMemory();
+  indexPage(argv[1]);
+  char buf[100] = { 0 };
+  printTrieContents(root, buf, 100);
+  freeTrieMemory(root);
 
   return 0;
 }
@@ -69,26 +71,31 @@ int main(int argc, char **argv)
 
 /* TODO: change this return type */
 void indexPage(const char *url) {
-  int contents_len = getText(url, contents_buf, BUF_SIZE);
+  getText(url, contents_buf, BUF_SIZE);
   char *contents = contents_buf;
 
   printf("%s\n", url);
-  while(*contents != '\0'){
-    while(!isalpha(*contents)){
+  while(*contents){
+    while(*contents && !isalpha(*contents)){
       contents++;
     }
     if(*contents == '\0'){
       return;
     }
     else{
-      const char *word = contents;
+      char *word = contents;
       int len = 0;
-      while(isalpha(*contents++)){
+      while(isalpha(*contents)){
         len++;
+        contents++;
       }
       *contents = '\0';
-      addWordOccurrence(root, word, len);
+      for(int i = 0; i < len; i++){
+        word[i] = tolower(word[i]);
+      }
       printf("\t%s\n", word);
+      addWordOccurrence(root, word, len);
+      contents++;
     }
   }
 }
@@ -115,26 +122,30 @@ void addWordOccurrence(TrieNode *root, const char *word, const int wordLength)
 }
 
 void printTrieContents(TrieNode *node, char* letters, int bufLen) {
+  int len = strnlen(letters, bufLen);
+  letters[len] = node->data;
+  if(node->wordCount > 0){
+    printf("%s: %d\n", letters+1, node->wordCount);
+  }
   for(int i = 0; i < LOWERCASE_LETTERS; i++){
-    snprintf(letters, bufLen, "%s%c", letters, node->data);
-    if(node->wordCount > 0){
-      printf("%s: %d\n", letters, node->wordCount);
-    }
     if(node->childNode[i] != NULL){
-      printTrieContents(node->childNode, letters, bufLen);
+      printTrieContents(node->childNode[i], letters, bufLen);
     }
   }
-
+  letters[len] = 0;
 }
 
 int freeTrieMemory(struct TrieNode *node)
 {
   for (int i = 0; i < LOWERCASE_LETTERS; i++)
   {
-    freeTrieMemory(node->childNode[i]);
+    if (node->childNode[i]) {
+      freeTrieMemory(node->childNode[i]);
+    }
   }
 
   free(node);
+  return 0;
 }
 
 /* You should not need to modify this function */
@@ -152,7 +163,7 @@ int getText(const char *srcAddr, char *buffer, const int bufSize)
             buffer);
     return 0;
   }
-  
+
   bytesRead = fread(buffer, sizeof(char), bufSize - 1, pipe);
   buffer[bytesRead] = '\0';
 
